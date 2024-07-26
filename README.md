@@ -81,7 +81,7 @@ To get started with Agira, follow these steps:
 
 ## Canister ID
 
-- **Canister ID**: Replace with your own canister ID from `juno.config.ts`.
+- **Canister ID**: mdw7w-piaaa-aaaal-ajoma-cai from `juno.config.ts`.
 - **Website**: [Agira on ICP](https://mdw7w-piaaa-aaaal-ajoma-cai.icp0.io/) (Update the URL with your deployed site if necessary)
 
 ## Features
@@ -97,6 +97,10 @@ To get started with Agira, follow these steps:
 ## Project Description
 
 **Agira** is dedicated to revolutionizing the agriculture industry by facilitating direct connections between farmers and consumers. With its farm listing system and blockchain-based incentives, Agira strives to provide mutual benefits for both farmers and consumers, fostering a more efficient and transparent agricultural marketplace.
+
+## Hackathon Entry
+
+This project is an entry for the [ISLACamp Hackathon](https://hackathon.islacamp.ph/).
 
 ## Contributing
 
