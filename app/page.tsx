@@ -11,6 +11,7 @@ import FarmCard from "./_components/farm-card";
 import FeatureCard from "./_components/feature-card";
 import RoadmapSection from "./_components/roadmap-section";
 import { AuthContext } from "./providers";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function HomePage() {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function HomePage() {
   }, []);
 
   const router = useRouter();
+  const { toast } = useToast();
 
   const { user } = useContext(AuthContext);
   if (user) router.push("/role");
@@ -53,8 +55,19 @@ export default function HomePage() {
           <div className="flex justify-center gap-2 md:justify-start">
             <Button
               onClick={async () => {
-                await signIn();
-                router.push("/role");
+                try {
+                  await signIn();
+                  router.push("/role");
+                  toast({
+                    title: "Success!",
+                    description: "You have been successfully signed in.",
+                  });
+                } catch (error) {
+                  toast({
+                    title: "Failed to sign in.",
+                    description: "Please try again",
+                  });
+                }
               }}
               className="flex animate-buttonheartbeat items-center gap-1 bg-farm pl-6 pr-8 text-base text-white hover:bg-farm/80 xl:py-6 xl:text-xl"
             >

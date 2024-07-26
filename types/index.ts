@@ -18,3 +18,15 @@ export type CartData = {
 };
 
 export type Cart = Doc<CartData>;
+
+export type OrderData = {
+  order_id: string;
+  products: {
+    product_id: string;
+    quantity: number;
+  }[];
+  amount: number;
+  status: "To Pack" | "Shipped" | "Completed" | "Cancelled";
+};
+
+export type Order = Doc<OrderData>;

@@ -4,17 +4,24 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { products } from "@/lib/dummy-data";
-import { Cart, CartData } from "@/types";
-import { deleteDoc, listDocs, setDoc } from "@junobuild/core-peer";
+import { Cart, CartData, OrderData } from "@/types";
+import {
+  deleteDoc,
+  listDocs,
+  setDoc,
+  deleteManyDocs,
+} from "@junobuild/core-peer";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
+import { nanoid } from "nanoid";
 
 export default function CartPage() {
   const [cart, setCart] = useState<Cart[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { user } = useContext(AuthContext);
   const router = useRouter();
   const { toast } = useToast();
@@ -47,6 +54,7 @@ export default function CartPage() {
         title: "Success!",
         description: `Product ${doc.data.product_id} has been successfully deleted from your cart.`,
       });
+      // Update the cart after deletion
       await getCartItems();
     } catch (error) {
       toast({
@@ -78,39 +86,28 @@ export default function CartPage() {
     }
   };
 
-  const cartProducts = useMemo(
-    () =>
-      cart
-        .map((cartItem) => {
-          const product = products.find(
-            (product) => product.product_id === cartItem.data.product_id,
-          );
-          if (!product) return null;
-          return {
-            ...product,
-            quantity: cartItem.data.quantity,
-            doc: cartItem,
-          };
-        })
-        .filter((product) => product !== null),
-    [cart],
+  const cartProducts = cart
+    .map((cartItem) => {
+      const product = products.find(
+        (product) => product.product_id === cartItem.data.product_id,
+      );
+      if (!product) return null; // Filter out if the product is not found
+      return {
+        ...product,
+        quantity: cartItem.data.quantity,
+        doc: cartItem,
+      };
+    })
+    .filter((product) => product !== null); // Remove null values
+
+  const subtotal = cartProducts.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0,
   );
 
-  const subtotal = useMemo(
-    () =>
-      cartProducts.reduce(
-        (total, item) => total + item.price * item.doc.data.quantity,
-        0,
-      ),
-    [cartProducts],
-  );
+  const deliveryFee = cartProducts.length > 0 ? 150 : 0;
 
-  const deliveryFee = useMemo(
-    () => (cartProducts.length > 0 ? 150 : 0),
-    [cartProducts],
-  );
-
-  const total = useMemo(() => subtotal + deliveryFee, [subtotal, deliveryFee]);
+  const total = subtotal + deliveryFee;
 
   useEffect(() => {
     if (!user) {
@@ -119,6 +116,55 @@ export default function CartPage() {
     }
     (async () => await getCartItems())();
   }, [user]);
+
+  const handleOnPlaceOrder = async () => {
+    if (!user || !cartProducts.length) return;
+
+    setIsSubmitting(true);
+
+    const key = nanoid();
+    const orderData: OrderData = {
+      order_id: key,
+      products: cartProducts.map((product) => ({
+        product_id: product.product_id,
+        quantity: product.quantity,
+      })),
+      amount: total,
+      status: "To Pack",
+    };
+
+    try {
+      await setDoc({
+        collection: "orders",
+        doc: {
+          key,
+          data: orderData,
+        },
+      });
+
+      await deleteManyDocs({
+        docs: cart.map((cartItem) => ({
+          collection: "cart",
+          doc: cartItem,
+        })),
+      });
+
+      toast({
+        title: "Success!",
+        description: "Your order has been placed successfully.",
+      });
+
+      setCart([]);
+      router.push("/cart/order-placed");
+    } catch (error) {
+      toast({
+        title: "Failed to place an order.",
+        description: "Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <Container className="flex min-h-[85vh] flex-col py-8">
@@ -246,9 +292,12 @@ export default function CartPage() {
               <Button
                 size="sm"
                 className="bg-farm hover:bg-farm/90"
-                disabled={!cartProducts.length}
+                disabled={!cartProducts.length || isSubmitting}
+                onClick={async () => {
+                  await handleOnPlaceOrder();
+                }}
               >
-                Place Order
+                {isSubmitting ? "Placing Order..." : "Place Order"}
               </Button>
             </div>
           </div>

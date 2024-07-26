@@ -2,13 +2,21 @@
 
 import { AuthContext } from "@/app/providers";
 import { initSatellite, signIn, signOut } from "@junobuild/core-peer";
-import { Bell, LogOut, MessageCircleMore, ShoppingCart } from "lucide-react";
+import {
+  Bell,
+  LogOut,
+  MessageCircleMore,
+  Package,
+  Package2,
+  ShoppingCart,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 import SearchInput from "./search-input";
 import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
 
 const links = [
   { name: "Marketplace", href: "/marketplace" },
@@ -29,6 +37,8 @@ export default function Header() {
         },
       }))();
   }, []);
+
+  const { toast } = useToast();
 
   return (
     <header className="top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90 md:sticky">
@@ -61,8 +71,19 @@ export default function Header() {
             <div className="flex items-center gap-2">
               <Button
                 onClick={async () => {
-                  await signIn();
-                  router.push("/role");
+                  try {
+                    await signIn();
+                    router.push("/role");
+                    toast({
+                      title: "Success!",
+                      description: "You have been successfully signed in.",
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Failed to sign in.",
+                      description: "Please try again",
+                    });
+                  }
                 }}
                 variant="outline"
               >
@@ -72,8 +93,12 @@ export default function Header() {
           )}
           {user && (
             <div className="flex gap-0">
-              <Button variant="ghost" size="icon" disabled>
-                <Bell className="text-farm" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/orders")}
+              >
+                <Package className="text-farm" />
               </Button>
 
               <Button
@@ -90,8 +115,19 @@ export default function Header() {
 
               <Button
                 onClick={async () => {
-                  await signOut();
-                  router.push("/");
+                  try {
+                    await signOut();
+                    router.push("/role");
+                    toast({
+                      title: "Success!",
+                      description: "You have been successfully signed out.",
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Failed to sign out.",
+                      description: "Please try again",
+                    });
+                  }
                 }}
                 variant="ghost"
                 size="icon"
