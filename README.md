@@ -82,7 +82,7 @@ To get started with Agira, follow these steps:
 ## Canister ID
 
 - **Canister ID**: mdw7w-piaaa-aaaal-ajoma-cai from `juno.config.ts`.
-- **Website**: [Agira on ICP](https://mdw7w-piaaa-aaaal-ajoma-cai.icp0.io/) (Update the URL with your deployed site if necessary)
+- **Website**: [Agira on ICP](https://mdw7w-piaaa-aaaal-ajoma-cai.icp0.io/)
 
 ## Features
 
