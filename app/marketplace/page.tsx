@@ -39,11 +39,11 @@ export default function MarketplacePage() {
             </div>
           </div>
 
-          <div className="hidden max-h-[8.5rem] overflow-hidden border xl:col-span-2 xl:block">
+          <div className="relative hidden max-h-[8.5rem] overflow-hidden border bg-gradient-to-b from-slate-50 from-80% to-farm/30 shadow xl:col-span-2 xl:block">
             <Image
-              src="/agira-marketplace.png"
+              src="/soarbound.png"
+              className="z-10 w-fit"
               alt="Agira Marketplace"
-              className="w-full object-cover"
               width={300}
               height={800}
               quality={100}
@@ -52,7 +52,7 @@ export default function MarketplacePage() {
             />
           </div>
 
-          <div className="hidden max-h-[8.5rem] overflow-hidden border xl:col-span-2 xl:block">
+          <div className="hidden h-full max-h-[8.5rem] overflow-hidden border xl:col-span-2 xl:block">
             <Image
               src="/agira-marketplace.png"
               alt="Agira Marketplace"
