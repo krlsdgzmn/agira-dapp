@@ -118,4 +118,4 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Presentation
 
-Watch the presentation of Agira on YouTube: [Watch Video](https://youtu.be/rzwRXAuCapI)
+Watch the presentation of Agira on YouTube: [Watch Video](https://youtu.be/rGeZArwjVbU)

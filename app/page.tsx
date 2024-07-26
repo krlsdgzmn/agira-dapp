@@ -12,6 +12,7 @@ import FeatureCard from "./_components/feature-card";
 import RoadmapSection from "./_components/roadmap-section";
 import { AuthContext } from "./providers";
 import { useToast } from "@/components/ui/use-toast";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function HomePage() {
   useEffect(() => {
@@ -81,19 +82,34 @@ export default function HomePage() {
               Get Started with ICP
             </Button>
 
-            <Button
-              variant="ghost"
-              className="px-4 text-base text-farm hover:text-farm xl:py-6"
-            >
-              <Image
-                src="/play.svg"
-                alt="Play"
-                width={15}
-                height={15}
-                priority
-              />
-              <span className="pl-4">Watch Video</span>
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="px-4 text-base text-farm hover:text-farm xl:py-6"
+                >
+                  <Image
+                    src="/play.svg"
+                    alt="Play"
+                    width={15}
+                    height={15}
+                    priority
+                  />
+                  <span className="pl-4">Watch Video</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="flex justify-center overflow-hidden rounded-2xl border-white/10 bg-transparent p-0 text-white backdrop-blur sm:min-h-[450px] sm:min-w-[720px] xl:min-h-[650] xl:min-w-[1080px]">
+                <iframe
+                  className="h-[200px] w-full sm:h-[450px] xl:h-[650px]"
+                  height="650"
+                  src="https://www.youtube.com/embed/rGeZArwjVbU"
+                  title="AGIRA Promotional Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
