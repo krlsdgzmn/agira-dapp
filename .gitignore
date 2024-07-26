@@ -3,18 +3,18 @@
 # dependencies
 /node_modules
 /.pnp
-*.pnp.js
-*.yarn/install-state.gz
+.pnp.js
+.yarn/install-state.gz
 
 # testing
-*/coverage
+/coverage
 
 # next.js
 /.next/
 /out/
 
 # production
-*/build
+/build
 
 # misc
 .DS_Store
@@ -34,3 +34,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/public/workers
