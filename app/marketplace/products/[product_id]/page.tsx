@@ -1,20 +1,18 @@
 // directory: app/…/[product_id]/page.tsx
 
 import Container from "@/components/container";
-import { ProductData } from "@/types";
-import { listDocs } from "@junobuild/core-peer";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import ProductItem from "@/app/marketplace/products/[product_id]/index";
+
+export const dynamicParams = true;
+export const dynamic = 'force-static';
 
 export async function generateStaticParams() {
-  const { items } = await listDocs<ProductData>({
-    collection: "products",
-    satellite: {
-      satelliteId: "mdw7w-piaaa-aaaal-ajoma-cai",
-    },
-  });
+  const data = join(process.cwd(), "app", "data", "products.json");
+  const products = JSON.parse(((await readFile(data)).toString()));
 
-  return items.map((product) => ({
-    product_id: product.data.product_id,
-  }));
+  return products.map((product_id: string) => ({product_id}))
 }
 
 export default function ProductPage({
@@ -24,7 +22,7 @@ export default function ProductPage({
 }) {
   return (
     <Container className="flex min-h-[85vh] flex-col items-center justify-center py-8">
-      {params.product_id}
+      <ProductItem params={params} />
     </Container>
   );
 }
