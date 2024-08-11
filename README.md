@@ -74,6 +74,8 @@ To get started with Agira, follow these steps:
    - Go to the [Juno website](https://juno.build).
    - Create a collection named `orders`.
    - Create a collection named `cart`.
+   - Create a collection named `products`.
+   - Create a collection named `farmers`.
 
 8. **Read the Juno Documentation**
 
