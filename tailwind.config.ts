@@ -86,11 +86,16 @@ const config = {
             transform: "scale(1)",
           },
         },
+        "logo-cloud": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(calc(-100% - 4rem))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         buttonheartbeat: "buttonheartbeat 2s infinite ease-in-out",
+        "logo-cloud": "logo-cloud 20s linear infinite",
       },
     },
   },

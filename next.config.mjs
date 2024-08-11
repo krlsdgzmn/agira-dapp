@@ -8,6 +8,10 @@
 
 import { withJuno } from "@junobuild/nextjs-plugin";
 
-export default withJuno({
-  nextConfig: { output: "export", images: { unoptimized: true } },
-});
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export",
+  images: { unoptimized: true },
+};
+
+export default withJuno({ nextConfig });

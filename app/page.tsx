@@ -2,6 +2,8 @@
 
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
 import { initSatellite, signIn } from "@junobuild/core-peer";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,19 +13,8 @@ import FarmCard from "./_components/farm-card";
 import FeatureCard from "./_components/feature-card";
 import RoadmapSection from "./_components/roadmap-section";
 import { AuthContext } from "./providers";
-import { useToast } from "@/components/ui/use-toast";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function HomePage() {
-  useEffect(() => {
-    (async () =>
-      await initSatellite({
-        workers: {
-          auth: true,
-        },
-      }))();
-  }, []);
-
   const router = useRouter();
   const { toast } = useToast();
 
@@ -150,7 +141,10 @@ export default function HomePage() {
       <section className="mx-auto min-h-[300px] max-w-screen-xl pb-20">
         <div className="flex flex-col px-2 text-center md:flex-row md:items-end md:justify-between">
           <h1 className="text-2xl font-bold md:text-left">Trusted Farms</h1>
-          <Link href="#" className="font-medium text-farm hover:underline">
+          <Link
+            href="/marketplace"
+            className="font-medium text-farm hover:underline"
+          >
             View all farms &rarr;
           </Link>
         </div>
@@ -253,7 +247,7 @@ export default function HomePage() {
             microloans, and benefit from our comprehensive resources and tools.
           </p>
           <Link
-            href="/sign-up"
+            href="#"
             className="text-lg font-bold text-farm hover:underline"
           >
             Sign up &rarr;

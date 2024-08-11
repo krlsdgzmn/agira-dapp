@@ -4,14 +4,14 @@ import { AuthContext } from "@/app/providers";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { ProductData, CartData } from "@/types";
-import { setDoc, listDocs } from "@junobuild/core-peer";
-import { ShoppingCart } from "lucide-react";
+import { CartData, Product } from "@/types";
+import { listDocs, setDoc } from "@junobuild/core-peer";
+import { Loader2, ShoppingCart } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 
-export default function ProductAction({ product }: { product: ProductData }) {
+export default function ProductAction({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
@@ -44,7 +44,7 @@ export default function ProductAction({ product }: { product: ProductData }) {
       });
 
       const existingItem = items.find(
-        (item) => item.data.product_id === product.product_id,
+        (item) => item.data.product_id === product.data.product_id,
       );
 
       if (existingItem) {
@@ -61,7 +61,7 @@ export default function ProductAction({ product }: { product: ProductData }) {
 
         toast({
           title: "Success!",
-          description: `${product.product_name} quantity has been updated in your cart.`,
+          description: `${product.data.product_name} quantity has been updated in your cart.`,
         });
       } else {
         const key = nanoid();
@@ -72,14 +72,14 @@ export default function ProductAction({ product }: { product: ProductData }) {
             key,
             data: {
               quantity: quantity,
-              product_id: product.product_id,
+              product_id: product.data.product_id,
             },
           },
         });
 
         toast({
           title: "Success!",
-          description: `${product.product_name} has been added to your cart.`,
+          description: `${product.data.product_name} has been added to your cart.`,
         });
       }
 
@@ -121,7 +121,7 @@ export default function ProductAction({ product }: { product: ProductData }) {
           aria-label="Quantity"
         />
 
-        <p>Quantity / {product.unit.toUpperCase()}</p>
+        <p>Quantity / {product.data.unit.toUpperCase()}</p>
       </div>
 
       <div className="flex items-center gap-2 py-4">
@@ -131,15 +131,19 @@ export default function ProductAction({ product }: { product: ProductData }) {
           disabled={isSubmitting}
           aria-label="Add to Cart"
         >
-          <ShoppingCart size={14} /> Add to Cart
+          {!isSubmitting && user && <ShoppingCart size={14} />}
+          {!user && <ShoppingCart size={14} />}
+          {isSubmitting && user && <Loader2 className="h-4 w-4 animate-spin" />}
+          Add to Cart
         </Button>
 
         <Button
-          className="bg-farm hover:bg-farm/90"
+          className="flex items-center gap-2 bg-farm hover:bg-farm/90"
           onClick={handleCheckout}
           disabled={isSubmitting}
           aria-label="Proceed to Checkout"
         >
+          {isSubmitting && user && <Loader2 className="h-4 w-4 animate-spin" />}
           Proceed to Checkout
         </Button>
       </div>

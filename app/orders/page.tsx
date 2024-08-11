@@ -7,9 +7,7 @@ import { listDocs } from "@junobuild/core-peer";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
-import { products } from "@/lib/dummy-data"; // Assuming this is your product data source
-
-// Create a map for quick product lookup
+import { farmers, products } from "@/lib/dummy-data";
 const productMap = new Map<string, ProductData>(
   products.map((product) => [product.product_id, product]),
 );
@@ -26,6 +24,12 @@ export default function OrdersPage() {
     try {
       const response = await listDocs<OrderData>({
         collection: "orders",
+        filter: {
+          order: {
+            desc: true,
+            field: "updated_at",
+          },
+        },
       });
 
       const { items } = response;
@@ -62,18 +66,25 @@ export default function OrdersPage() {
                     <p
                       className={`${
                         order.data.status === "To Pack"
-                          ? "border-yellow-500"
+                          ? "bg-yellow-500"
                           : order.data.status === "Shipped"
-                            ? "border-blue-500"
+                            ? "bg-blue-500"
                             : order.data.status === "Cancelled"
-                              ? "border-red-500"
-                              : "border-green-500"
-                      } rounded-xl border-2 p-1 px-2 text-xs font-bold`}
+                              ? "bg-red-500"
+                              : "bg-green-500"
+                      } rounded-xl p-1 px-2 text-xs font-bold text-white`}
                     >
                       {order.data.status}
                     </p>
                   </div>
 
+                  <p>
+                    {
+                      farmers.find(
+                        (item) => item.farmer_id === order.data.farmer_id,
+                      )?.farm_name
+                    }
+                  </p>
                   <p>₱{order.data.amount.toFixed(2)}</p>
                   <p>
                     <strong>Products:</strong>

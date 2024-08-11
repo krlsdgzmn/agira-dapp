@@ -16,7 +16,7 @@ export default function RolePage() {
   return (
     <Container className="flex min-h-[85vh] items-center justify-center py-8">
       <main>
-        <section className="mx-auto grid gap-8 py-4 sm:grid-cols-2 md:py-8 lg:min-w-[1024px] lg:gap-16">
+        <section className="mx-auto grid gap-8 py-4 sm:grid-cols-2 md:py-8 lg:min-w-[1024px] xl:gap-16">
           <Link
             href="/marketplace"
             className="flex min-w-[300px] flex-col justify-center overflow-hidden rounded-lg border border-border bg-gradient-to-br from-orange-500/80 to-yellow-500/80 p-8 text-white transition-all duration-300 ease-in-out hover:bg-farm/90 md:p-16"

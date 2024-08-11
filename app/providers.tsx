@@ -1,7 +1,7 @@
 "use client";
 
 import { Toaster } from "@/components/ui/toaster";
-import { authSubscribe, type User } from "@junobuild/core-peer";
+import { authSubscribe, initSatellite, type User } from "@junobuild/core-peer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
@@ -36,6 +36,13 @@ const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => {
 const queryClient = new QueryClient();
 
 export default function Providers({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    (async () =>
+      await initSatellite({
+        satelliteId: "mdw7w-piaaa-aaaal-ajoma-cai",
+      }))();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

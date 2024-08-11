@@ -1,19 +1,18 @@
 "use client";
 
 import { AuthContext } from "@/app/providers";
-import { initSatellite, signIn, signOut } from "@junobuild/core-peer";
+import { signIn, signOut } from "@junobuild/core-peer";
 import {
-  Bell,
+  LogIn,
   LogOut,
   MessageCircleMore,
   Package,
-  Package2,
   ShoppingCart,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import SearchInput from "./search-input";
 import { Button } from "./ui/button";
 import { useToast } from "./ui/use-toast";
@@ -28,15 +27,6 @@ const links = [
 export default function Header() {
   const { user } = useContext(AuthContext);
   const router = useRouter();
-
-  useEffect(() => {
-    (async () =>
-      await initSatellite({
-        workers: {
-          auth: true,
-        },
-      }))();
-  }, []);
 
   const { toast } = useToast();
 
@@ -85,9 +75,12 @@ export default function Header() {
                     });
                   }
                 }}
+                className="flex items-center gap-1"
                 variant="outline"
+                title="Sign In"
               >
                 Sign In
+                <LogIn size={18} />
               </Button>
             </div>
           )}
@@ -97,6 +90,7 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 onClick={() => router.push("/orders")}
+                title="Order Purchases"
               >
                 <Package className="text-farm" />
               </Button>
@@ -105,11 +99,12 @@ export default function Header() {
                 variant="ghost"
                 size="icon"
                 onClick={() => router.push("/cart")}
+                title="Cart"
               >
                 <ShoppingCart className="text-farm" />
               </Button>
 
-              <Button variant="ghost" size="icon" disabled>
+              <Button variant="ghost" size="icon" title="Messages" disabled>
                 <MessageCircleMore className="text-farm" />
               </Button>
 
@@ -131,6 +126,7 @@ export default function Header() {
                 }}
                 variant="ghost"
                 size="icon"
+                title="Sign Out"
               >
                 <LogOut className="text-farm" />
               </Button>

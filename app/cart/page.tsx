@@ -3,21 +3,21 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { products } from "@/lib/dummy-data";
+import { farmers, products } from "@/lib/dummy-data";
 import { Cart, CartData, OrderData } from "@/types";
 import {
   deleteDoc,
+  deleteManyDocs,
   listDocs,
   setDoc,
-  deleteManyDocs,
 } from "@junobuild/core-peer";
-import { Trash2 } from "lucide-react";
+import { Loader2, Trash2 } from "lucide-react";
+import { nanoid } from "nanoid";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
-import { nanoid } from "nanoid";
 
 export default function CartPage() {
   const [cart, setCart] = useState<Cart[]>([]);
@@ -38,7 +38,7 @@ export default function CartPage() {
       setCart(items);
     } catch (error) {
       toast({
-        title: "Failed to fetch cart items:",
+        title: "Failed to fetch cart items",
         description: "Please refresh.",
       });
     }
@@ -122,26 +122,51 @@ export default function CartPage() {
 
     setIsSubmitting(true);
 
-    const key = nanoid();
-    const orderData: OrderData = {
-      order_id: key,
-      products: cartProducts.map((product) => ({
-        product_id: product.product_id,
-        quantity: product.quantity,
-      })),
-      amount: total,
-      status: "To Pack",
-    };
-
     try {
-      await setDoc({
-        collection: "orders",
-        doc: {
-          key,
-          data: orderData,
+      // Group products by farmer_id
+      const ordersByFarmer = cartProducts.reduce(
+        (acc, product) => {
+          const farmerId = product.farmer_id; // Assuming `farmer_id` is part of the product data
+          if (!acc[farmerId]) {
+            acc[farmerId] = [];
+          }
+          acc[farmerId].push(product);
+          return acc;
         },
-      });
+        {} as Record<string, typeof cartProducts>,
+      );
 
+      // Create separate orders for each farmer
+      for (const farmerId in ordersByFarmer) {
+        const orderProducts = ordersByFarmer[farmerId];
+        const orderTotal = orderProducts.reduce(
+          (sum, product) => sum + product.price * product.quantity,
+          0,
+        );
+
+        const key = nanoid();
+        const orderData: OrderData = {
+          order_id: key,
+          consumer_id: user.key, // Assuming user object contains `id`
+          farmer_id: farmerId,
+          products: orderProducts.map((product) => ({
+            product_id: product.product_id,
+            quantity: product.quantity,
+          })),
+          amount: orderTotal,
+          status: "To Pack",
+        };
+
+        await setDoc({
+          collection: "orders",
+          doc: {
+            key,
+            data: orderData,
+          },
+        });
+      }
+
+      // Delete all cart items after placing orders
       await deleteManyDocs({
         docs: cart.map((cartItem) => ({
           collection: "cart",
@@ -199,7 +224,11 @@ export default function CartPage() {
                     <div>
                       <h1 className="font-bold">{product.product_name}</h1>
                       <h2 className="text-sm text-muted-foreground">
-                        {product.farm_name}
+                        {
+                          farmers.find(
+                            (item) => item.farmer_id === product.farmer_id,
+                          )?.farm_name
+                        }
                       </h2>
                     </div>
 
@@ -276,12 +305,10 @@ export default function CartPage() {
                 </div>
               </div>
             ))}
-
             <div className="flex justify-between py-2 text-sm font-medium">
               <h2>Subtotal</h2>
               <p>₱{subtotal.toFixed(2)}</p>
             </div>
-
             <div className="flex justify-between pb-2 text-sm font-medium">
               <h2>Delivery Fee</h2>
               <p>₱{deliveryFee.toFixed(2)}</p>
@@ -291,13 +318,14 @@ export default function CartPage() {
               <h2 className="font-bold">₱{total.toFixed(2)}</h2>
               <Button
                 size="sm"
-                className="bg-farm hover:bg-farm/90"
+                className="flex items-center gap-2 bg-farm hover:bg-farm/90"
                 disabled={!cartProducts.length || isSubmitting}
                 onClick={async () => {
                   await handleOnPlaceOrder();
                 }}
               >
-                {isSubmitting ? "Placing Order..." : "Place Order"}
+                {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                Place Order
               </Button>
             </div>
           </div>

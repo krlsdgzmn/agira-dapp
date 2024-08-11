@@ -1,7 +1,7 @@
 import Container from "@/components/container";
-import MarketplaceSection from "./_components/whole-sale-section";
 import Image from "next/image";
-import { products, farms } from "@/lib/dummy-data";
+import AnimatedLogoCloud from "./_components/animate-logo-cloud";
+import MarketplaceSection from "./_components/whole-sale-section";
 
 export default function MarketplacePage() {
   return (
@@ -39,7 +39,7 @@ export default function MarketplacePage() {
             </div>
           </div>
 
-          <div className="relative hidden max-h-[8.5rem] overflow-hidden border bg-gradient-to-b from-slate-50 from-80% to-farm/30 shadow xl:col-span-2 xl:block">
+          <div className="relative hidden max-h-[8.5rem] overflow-hidden border bg-gradient-to-b from-slate-50 from-80% to-farm/10 shadow xl:col-span-2 xl:block">
             <Image
               src="/soarbound.png"
               className="z-10 w-fit"
@@ -52,17 +52,8 @@ export default function MarketplacePage() {
             />
           </div>
 
-          <div className="hidden h-full max-h-[8.5rem] overflow-hidden border xl:col-span-2 xl:block">
-            <Image
-              src="/agira-marketplace.png"
-              alt="Agira Marketplace"
-              className="w-full object-cover"
-              width={300}
-              height={800}
-              quality={100}
-              unoptimized
-              priority
-            />
+          <div className="relative hidden h-[8.5rem] max-h-[8.5rem] items-center justify-center overflow-hidden border bg-gradient-to-b from-slate-50 from-80% to-farm/10 shadow xl:col-span-2 xl:flex">
+            <AnimatedLogoCloud />
           </div>
         </section>
 
@@ -71,7 +62,6 @@ export default function MarketplacePage() {
           title="Whole Sale"
           description="Discover the Best Deals on Bulk Purchases"
           delayCount={4000}
-          carousels={products}
         />
 
         {/* Amazing Deals Section */}
@@ -79,17 +69,10 @@ export default function MarketplacePage() {
           title="Amazing Deals"
           description="Unbeatable Prices on Top-Quality Products"
           delayCount={7000}
-          carousels={products}
           isDiscounted
         />
 
         {/* Farms Near You */}
-        <MarketplaceSection
-          title="Farms Near You"
-          description="Fresh, Local, and Sustainable"
-          delayCount={5000}
-          carousels={farms}
-        />
       </main>
     </Container>
   );

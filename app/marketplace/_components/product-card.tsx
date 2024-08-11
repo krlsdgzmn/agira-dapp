@@ -1,30 +1,33 @@
+import { Farmer } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CarouselCard({
-  id,
+export default function ProductCard({
+  product_id,
+  farmer_id,
   product_name,
   price,
   unit,
-  farm_name,
   image,
-  location,
   isDiscounted,
+  farmers,
 }: {
-  id: string | undefined;
-  product_name?: string;
-  price?: number;
-  unit?: string;
-  farm_name: string;
+  product_id: string;
+  farmer_id: string;
+  product_name: string;
+  price: number;
+  unit: string;
   image: string;
-  location?: string;
   isDiscounted?: boolean;
+  farmers: Farmer[];
 }) {
+  const farmer = farmers.find((farmer) => farmer.data.farmer_id === farmer_id);
+
   return (
-    <Link href={location ? `#` : `/marketplace/products/${id}`}>
+    <Link href={`/marketplace/products/${product_id}`}>
       <Image
         src={image}
-        alt={farm_name}
+        alt={product_id}
         className="h-[125px] w-full object-cover"
         width={200}
         height={200}
@@ -41,9 +44,7 @@ export default function CarouselCard({
       </div>
 
       <div className="max-h-15 p-3">
-        <h1 className="text-sm font-semibold">
-          {product_name ? product_name : farm_name}
-        </h1>
+        <h1 className="text-sm font-semibold">{product_name}</h1>
         {price && (
           <h2 className="text-xs text-orange-500">
             {isDiscounted && (
@@ -55,7 +56,7 @@ export default function CarouselCard({
           </h2>
         )}
         <p className="text-xs text-muted-foreground">
-          {location ? location : farm_name}
+          {farmer?.data.farm_name}
         </p>
       </div>
     </Link>

@@ -7,14 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write .",
-    "postinstall:copy-auth": "node -e \"require('fs').cpSync('node_modules/@junobuild/core-peer/dist/workers/', './public/workers', {recursive: true});\"",
-    "postinstall": "npm run postinstall:copy-auth"
+    "format": "prettier --write ."
   },
   "dependencies": {
-    "@junobuild/core-peer": "^0.0.20",
-    "@junobuild/nextjs-plugin": "^0.0.8",
+    "@junobuild/core-peer": "^0.0.24-next-2024-08-09",
+    "@junobuild/nextjs-plugin": "^0.0.10",
     "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@tanstack/react-query": "^5.51.11",
