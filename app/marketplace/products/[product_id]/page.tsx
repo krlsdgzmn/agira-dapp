@@ -6,13 +6,13 @@ import { join } from "node:path";
 import ProductItem from "@/app/marketplace/products/[product_id]/index";
 
 export const dynamicParams = true;
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 
 export async function generateStaticParams() {
   const data = join(process.cwd(), "app", "data", "products.json");
-  const products = JSON.parse(((await readFile(data)).toString()));
+  const products = JSON.parse((await readFile(data)).toString());
 
-  return products.map((product_id: string) => ({product_id}))
+  return products.map((product_id: string) => ({ product_id }));
 }
 
 export default function ProductPage({

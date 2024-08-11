@@ -92,7 +92,11 @@ To get started with Agira, follow these steps:
 
 ### Farmer Side
 
-- **Work in Progress (WIP)**: Features for the farmer side are still under development.
+- **Product Management**: Farmers can now add products to the marketplace. However, the dashboard and orders management features are still a work in progress (WIP).
+
+## Known Issues
+
+- **Deployment Requirement**: Every time a product is added, the dApp must be redeployed. This issue arises due to limitations with Next.js and the `@dfinity/agent` library.
 
 ## Project Description
 
@@ -111,6 +115,10 @@ If you would like to contribute to Agira, please follow the standard GitHub flow
 3. Commit your changes (`git commit -am 'Add new feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a pull request.
+
+## Special Thanks
+
+A special thanks to **peterpeterparker**, the creator of Juno, for providing insights and solutions to overcome some of the challenges faced with dynamic routing in Next.js and the `@dfinity/agent` library.
 
 ## License
 

@@ -19,6 +19,10 @@ export default function FarmerDashboard({
           <p className="mb-2 text-sm text-muted-foreground md:text-base">
             You can manage your farm profile here.
           </p>
+
+          <div className="py-32 text-center text-3xl font-bold">
+            <h1>🚸 Under Construction 🚸</h1>
+          </div>
         </section>
       </main>
     </Container>

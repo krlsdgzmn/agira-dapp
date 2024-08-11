@@ -2,49 +2,94 @@
 
 import Container from "@/components/container";
 import { useToast } from "@/components/ui/use-toast";
-import { Order, OrderData, Product, ProductData } from "@/types";
+import {
+  Farmer,
+  FarmerData,
+  Order,
+  OrderData,
+  Product,
+  ProductData,
+} from "@/types";
 import { listDocs } from "@junobuild/core-peer";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
-import { farmers, products } from "@/lib/dummy-data";
-const productMap = new Map<string, ProductData>(
-  products.map((product) => [product.product_id, product]),
-);
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [farmers, setFarmers] = useState<Farmer[]>([]);
   const { toast } = useToast();
   const { user } = useContext(AuthContext);
 
   const router = useRouter();
-  if (!user) router.push("/");
-
-  const getOrders = async () => {
-    try {
-      const response = await listDocs<OrderData>({
-        collection: "orders",
-        filter: {
-          order: {
-            desc: true,
-            field: "updated_at",
-          },
-        },
-      });
-
-      const { items } = response;
-      setOrders(items);
-    } catch (error) {
-      toast({
-        title: "Failed to fetch data.",
-        description: "Please try again.",
-      });
-    }
-  };
 
   useEffect(() => {
+    if (!user) {
+      router.push("/");
+      return;
+    }
+
+    const getOrders = async () => {
+      try {
+        const response = await listDocs<OrderData>({
+          collection: "orders",
+          filter: {
+            order: {
+              desc: true,
+              field: "updated_at",
+            },
+          },
+        });
+
+        const { items } = response;
+        setOrders(items);
+      } catch (error) {
+        toast({
+          title: "Failed to fetch data.",
+          description: "Please try again.",
+        });
+      }
+    };
+
+    const getProductsData = async () => {
+      try {
+        const { items } = await listDocs<ProductData>({
+          collection: "products",
+        });
+        setProducts(items);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: "Failed to fetch products.",
+          description: "Please try again.",
+        });
+      }
+    };
+
+    const getFarmersData = async () => {
+      try {
+        const { items } = await listDocs<FarmerData>({
+          collection: "farmers",
+        });
+        setFarmers(items);
+      } catch (error) {
+        console.error(error);
+        toast({
+          title: "Failed to fetch farmers.",
+          description: "Please try again.",
+        });
+      }
+    };
+
     getOrders();
-  }, []);
+    getProductsData();
+    getFarmersData();
+  }, [user, router, toast]);
+
+  const productMap = new Map<string, ProductData>(
+    products.map((product) => [product.data.product_id, product.data]),
+  );
 
   return (
     <Container className="flex min-h-[85vh] flex-col items-center justify-center py-8">
@@ -53,7 +98,6 @@ export default function OrdersPage() {
         <p className="pb-4 text-muted-foreground">
           Here, you can review and manage all your current and past orders.
         </p>
-        {/* Display orders */}
         {orders.length === 0 ? (
           <p className="font-medium text-muted-foreground">No orders found.</p>
         ) : (
@@ -79,11 +123,9 @@ export default function OrdersPage() {
                   </div>
 
                   <p>
-                    {
-                      farmers.find(
-                        (item) => item.farmer_id === order.data.farmer_id,
-                      )?.farm_name
-                    }
+                    {farmers.find(
+                      (item) => item.data.farmer_id === order.data.farmer_id,
+                    )?.data.farm_name || "Unknown Farm"}
                   </p>
                   <p>₱{order.data.amount.toFixed(2)}</p>
                   <p>
@@ -94,8 +136,8 @@ export default function OrdersPage() {
                       const productDetails = productMap.get(product.product_id);
                       return (
                         <li key={index}>
-                          {productDetails?.product_name || "Unknown"} x {""}
-                          {product.quantity || 1} {productDetails?.unit}
+                          {productDetails?.product_name || "Unknown"} x{" "}
+                          {product.quantity || 1} {productDetails?.unit || ""}
                         </li>
                       );
                     })}

@@ -3,8 +3,15 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { farmers, products } from "@/lib/dummy-data";
-import { Cart, CartData, OrderData } from "@/types";
+import {
+  Cart,
+  CartData,
+  Farmer,
+  FarmerData,
+  OrderData,
+  Product,
+  ProductData,
+} from "@/types";
 import {
   deleteDoc,
   deleteManyDocs,
@@ -22,6 +29,8 @@ import { AuthContext } from "../providers";
 export default function CartPage() {
   const [cart, setCart] = useState<Cart[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [farmers, setFarmers] = useState<Farmer[]>([]);
   const { user } = useContext(AuthContext);
   const router = useRouter();
   const { toast } = useToast();
@@ -86,10 +95,34 @@ export default function CartPage() {
     }
   };
 
+  const getProductsData = async () => {
+    try {
+      const { items } = await listDocs<ProductData>({
+        collection: "products",
+      });
+
+      setProducts(items);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getFarmersData = async () => {
+    try {
+      const { items } = await listDocs<FarmerData>({
+        collection: "farmers",
+      });
+
+      setFarmers(items);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const cartProducts = cart
     .map((cartItem) => {
       const product = products.find(
-        (product) => product.product_id === cartItem.data.product_id,
+        (product) => product.data.product_id === cartItem.data.product_id,
       );
       if (!product) return null; // Filter out if the product is not found
       return {
@@ -101,7 +134,7 @@ export default function CartPage() {
     .filter((product) => product !== null); // Remove null values
 
   const subtotal = cartProducts.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.data.price * item.quantity,
     0,
   );
 
@@ -112,9 +145,12 @@ export default function CartPage() {
   useEffect(() => {
     if (!user) {
       setCart([]);
+
       return;
     }
     (async () => await getCartItems())();
+    (async () => await getProductsData())();
+    (async () => await getFarmersData())();
   }, [user]);
 
   const handleOnPlaceOrder = async () => {
@@ -126,7 +162,7 @@ export default function CartPage() {
       // Group products by farmer_id
       const ordersByFarmer = cartProducts.reduce(
         (acc, product) => {
-          const farmerId = product.farmer_id; // Assuming `farmer_id` is part of the product data
+          const farmerId = product.data.farmer_id; // Assuming `farmer_id` is part of the product data
           if (!acc[farmerId]) {
             acc[farmerId] = [];
           }
@@ -140,7 +176,7 @@ export default function CartPage() {
       for (const farmerId in ordersByFarmer) {
         const orderProducts = ordersByFarmer[farmerId];
         const orderTotal = orderProducts.reduce(
-          (sum, product) => sum + product.price * product.quantity,
+          (sum, product) => sum + product.data.price * product.quantity,
           0,
         );
 
@@ -150,7 +186,7 @@ export default function CartPage() {
           consumer_id: user.key, // Assuming user object contains `id`
           farmer_id: farmerId,
           products: orderProducts.map((product) => ({
-            product_id: product.product_id,
+            product_id: product.data.product_id,
             quantity: product.quantity,
           })),
           amount: orderTotal,
@@ -203,17 +239,17 @@ export default function CartPage() {
           <div className="flex flex-col gap-4">
             {cartProducts.map((product) => (
               <div
-                key={product.product_id}
+                key={product.data.product_id}
                 className="flex h-[110px] justify-between rounded-md border p-4 shadow"
               >
                 <Link
                   className="flex max-h-[100px] w-[300px] items-center gap-2"
-                  href={`/marketplace/products/${product.product_id}`}
+                  href={`/marketplace/products/${product.data.product_id}`}
                 >
                   <div className="w-[75px]">
                     <Image
-                      src={product.image}
-                      alt={product.product_name}
+                      src={product.data.image}
+                      alt={product.data.product_name}
                       className="object-contain"
                       width={200}
                       height={200}
@@ -222,18 +258,19 @@ export default function CartPage() {
 
                   <div className="flex h-full flex-col justify-between">
                     <div>
-                      <h1 className="font-bold">{product.product_name}</h1>
+                      <h1 className="font-bold">{product.data.product_name}</h1>
                       <h2 className="text-sm text-muted-foreground">
                         {
                           farmers.find(
-                            (item) => item.farmer_id === product.farmer_id,
-                          )?.farm_name
+                            (item) =>
+                              item.data.farmer_id === product.data.farmer_id,
+                          )?.data.farm_name
                         }
                       </h2>
                     </div>
 
                     <p className="text-sm font-medium">
-                      ₱{product.price.toFixed(2)}/{product.unit}
+                      ₱{product.data.price.toFixed(2)}/{product.data.unit}
                     </p>
                   </div>
                 </Link>
@@ -287,20 +324,20 @@ export default function CartPage() {
           <div className="rounded-lg border p-4">
             <h1 className="font-bold">Products</h1>
             {cartProducts.map((product) => (
-              <div key={product.product_id}>
+              <div key={product.data.product_id}>
                 <div className="flex justify-between pt-2 text-sm">
-                  <div className="font-medium">{product.product_name}</div>
+                  <div className="font-medium">{product.data.product_name}</div>
                   <div>
-                    {product.quantity} {product.unit}
+                    {product.quantity} {product.data.unit}
                   </div>
                 </div>
 
                 <div className="flex justify-between border-b py-2 text-sm text-muted-foreground">
                   <p>
-                    {product.quantity} x ₱{product.price.toFixed(2)}
+                    {product.quantity} x ₱{product.data.price.toFixed(2)}
                   </p>
                   <p className="font-medium">
-                    ₱{(product.quantity * product.price).toFixed(2)}
+                    ₱{(product.quantity * product.data.price).toFixed(2)}
                   </p>
                 </div>
               </div>
