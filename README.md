@@ -100,7 +100,7 @@ To get started with Agira, follow these steps:
 
 - **Redeployment Required**: Every time a product is added, the dApp needs to be redeployed due to a problem with Next.js and `@dfinity/agent`. This is discussed in detail in a [pull request](https://github.com/krlsdgzmn/agira-dapp/pull/2) by the creator of Juno.
 
-  The PR outlines several issues related to SSR (server-side rendering) and agent-js compatibility in Next.js. Key points include:
+  The PR outlines several issues related to static site generation (SSG) and agent-js compatibility in Next.js. Key points include:
 
   - The need for static export and the limitations of using `generateStaticParams` with agent-js.
   - The contradiction between the development and production behaviors in Next.js.
@@ -108,7 +108,7 @@ To get started with Agira, follow these steps:
 
   The PR also suggests that building the dApp whenever data changes might be the best approach to avoid runtime issues. Special thanks to the creator of Juno for his contributions and insights.
 
-- **SSG Dynamic Routing Issue**: There is an ongoing issue with agent-js not working in Next.js static site generation (SSG) dynamic routing. This issue has been raised on the [Dfinity forum](https://forum.dfinity.org/t/agent-js-does-not-work-in-next-js-ssg/34090), where discussions are ongoing for a potential solution.
+  This issue has been raised on the [DFINITY forum](https://forum.dfinity.org/t/agent-js-does-not-work-in-next-js-ssg/34090), where discussions are ongoing for a potential solution.
 
 ## Project Description
 
