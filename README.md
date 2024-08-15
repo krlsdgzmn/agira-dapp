@@ -100,7 +100,7 @@ To get started with Agira, follow these steps:
 
 - **Redeployment Required**: Every time a product is added, the dApp needs to be redeployed due to a problem with Next.js and `@dfinity/agent`. This is discussed in detail in a [pull request](https://github.com/krlsdgzmn/agira-dapp/pull/2) by the creator of Juno.
 
-  The PR outlines several issues related to static site generation (SSG) and agent-js compatibility in Next.js. Key points include:
+  The PR outlines several issues related to static site generation (SSG) dynamic routing and agent-js compatibility in Next.js. Key points include:
 
   - The need for static export and the limitations of using `generateStaticParams` with agent-js.
   - The contradiction between the development and production behaviors in Next.js.
