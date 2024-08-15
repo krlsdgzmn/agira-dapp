@@ -91,9 +91,9 @@ export default function HomePage() {
               </DialogTrigger>
               <DialogContent className="flex justify-center overflow-hidden rounded-2xl border-white/10 bg-transparent p-0 text-white backdrop-blur sm:min-h-[450px] sm:min-w-[720px] xl:min-h-[650] xl:min-w-[1080px]">
                 <iframe
-                  className="h-[200px] w-full sm:h-[450px] xl:h-[650px]"
+                  src="https://drive.google.com/file/d/1Os4k1JXVrFNdYu59lcHFIarooiPegJwv/preview"
                   height="650"
-                  src="https://www.youtube.com/embed/rGeZArwjVbU"
+                  className="h-[200px] w-full sm:h-[450px] xl:h-[650px]"
                   title="AGIRA Promotional Video"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   referrerPolicy="strict-origin-when-cross-origin"
