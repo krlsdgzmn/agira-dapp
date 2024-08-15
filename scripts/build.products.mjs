@@ -31,4 +31,3 @@ const buildProducts = async () => {
 };
 
 await buildProducts();
-

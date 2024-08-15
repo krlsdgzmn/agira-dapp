@@ -1,9 +1,7 @@
-// directory: app/…/[product_id]/page.tsx
-
+import ProductItem from "@/app/marketplace/products/[product_id]/index";
 import Container from "@/components/container";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import ProductItem from "@/app/marketplace/products/[product_id]/index";
 
 export const dynamicParams = true;
 export const dynamic = "force-static";

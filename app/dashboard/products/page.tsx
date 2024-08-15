@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthContext } from "@/app/providers";
 import Container from "@/components/container";
 import {
   Table,
@@ -12,11 +13,11 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Product, ProductData } from "@/types";
 import { listDocs } from "@junobuild/core-peer";
+import Image from "next/image";
 import { useContext, useEffect, useState } from "react";
 import SideBar from "../_components/sidebar";
 import ProductButton from "./_components/product-button";
-import { AuthContext } from "@/app/providers";
-import Image from "next/image";
+import ActionButton from "./_components/action-button";
 
 export default function ProductsDashboard() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -113,11 +114,21 @@ export default function ProductsDashboard() {
                     </TableCell>
                     <TableCell>{item.data.unit}</TableCell>
                     <TableCell>{item.data.price.toFixed(2)}</TableCell>
-                    <TableCell>Action</TableCell>
+                    <TableCell>
+                      <ActionButton
+                        doc={item}
+                        getProductsData={getProductsData}
+                      />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+            {products.length === 0 && (
+              <p className="py-8 text-center text-muted-foreground">
+                You have no products added yet.
+              </p>
+            )}
           </div>
         </section>
       </main>

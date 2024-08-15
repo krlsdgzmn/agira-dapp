@@ -94,7 +94,7 @@ To get started with Agira, follow these steps:
 
 ### Farmer Side
 
-- **Product Management**: Farmers can now add products to the marketplace. However, the dashboard and orders management features are still a work in progress (WIP).
+- **Product Management**: Farmers can now add products, manage orders, and fully access the dashboard. The wallet tab is still a work in progress (WIP).
 
 ## Known Issues
 
@@ -107,6 +107,8 @@ To get started with Agira, follow these steps:
   - A workaround involving the creation of a script that populates a static JSON file with product data.
 
   The PR also suggests that building the dApp whenever data changes might be the best approach to avoid runtime issues. Special thanks to the creator of Juno for his contributions and insights.
+
+- **SSG Dynamic Routing Issue**: There is an ongoing issue with agent-js not working in Next.js static site generation (SSG) dynamic routing. This issue has been raised on the [Dfinity forum](https://forum.dfinity.org/t/agent-js-does-not-work-in-next-js-ssg/34090), where discussions are ongoing for a potential solution.
 
 ## Project Description
 

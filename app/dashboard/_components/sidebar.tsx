@@ -1,9 +1,13 @@
 "use client";
 
-import { LayoutDashboard, ShoppingBasket, ScrollText } from "lucide-react";
+import {
+  LayoutDashboard,
+  ScrollText,
+  ShoppingBasket,
+  Wallet,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
 const links = [
   {
@@ -20,6 +24,11 @@ const links = [
     path: "/dashboard/orders",
     icon: <ScrollText />,
     name: "Orders",
+  },
+  {
+    path: "/dashboard/wallet",
+    icon: <Wallet />,
+    name: "Wallet",
   },
 ];
 

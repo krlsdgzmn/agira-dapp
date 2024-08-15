@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@/components/ui/use-toast";
 import { Farmer, FarmerData, Product, ProductData } from "@/types";
 import { getDoc, listDocs } from "@junobuild/core-peer";
 import { Loader2, Tractor } from "lucide-react";
@@ -8,7 +9,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import MarketplaceSection from "../../_components/whole-sale-section";
 import ProductAction from "./_components/product-action";
-import { toast } from "@/components/ui/use-toast";
 
 const getCategoryImageSrc = (category: string) => {
   switch (category) {

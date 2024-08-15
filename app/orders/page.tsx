@@ -14,6 +14,7 @@ import { listDocs } from "@junobuild/core-peer";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
+import ActionButton from "./_components/action-button";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -24,63 +25,68 @@ export default function OrdersPage() {
 
   const router = useRouter();
 
+  const getOrders = async () => {
+    try {
+      const response = await listDocs<OrderData>({
+        collection: "orders",
+        filter: {
+          order: {
+            desc: true,
+            field: "created_at",
+          },
+        },
+      });
+
+      const { items } = response;
+
+      const ownedOrders = items.filter(
+        (item) => item.data.consumer_id === user?.key,
+      );
+
+      setOrders(ownedOrders);
+    } catch (error) {
+      toast({
+        title: "Failed to fetch data.",
+        description: "Please try again.",
+      });
+    }
+  };
+
+  const getProductsData = async () => {
+    try {
+      const { items } = await listDocs<ProductData>({
+        collection: "products",
+      });
+      setProducts(items);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to fetch products.",
+        description: "Please try again.",
+      });
+    }
+  };
+
+  const getFarmersData = async () => {
+    try {
+      const { items } = await listDocs<FarmerData>({
+        collection: "farmers",
+      });
+      setFarmers(items);
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Failed to fetch farmers.",
+        description: "Please try again.",
+      });
+    }
+  };
+
   useEffect(() => {
     if (!user) {
       router.push("/");
       return;
     }
-
-    const getOrders = async () => {
-      try {
-        const response = await listDocs<OrderData>({
-          collection: "orders",
-          filter: {
-            order: {
-              desc: true,
-              field: "updated_at",
-            },
-          },
-        });
-
-        const { items } = response;
-        setOrders(items);
-      } catch (error) {
-        toast({
-          title: "Failed to fetch data.",
-          description: "Please try again.",
-        });
-      }
-    };
-
-    const getProductsData = async () => {
-      try {
-        const { items } = await listDocs<ProductData>({
-          collection: "products",
-        });
-        setProducts(items);
-      } catch (error) {
-        console.error(error);
-        toast({
-          title: "Failed to fetch products.",
-          description: "Please try again.",
-        });
-      }
-    };
-
-    const getFarmersData = async () => {
-      try {
-        const { items } = await listDocs<FarmerData>({
-          collection: "farmers",
-        });
-        setFarmers(items);
-      } catch (error) {
-        console.error(error);
-        toast({
-          title: "Failed to fetch farmers.",
-          description: "Please try again.",
-        });
-      }
-    };
 
     getOrders();
     getProductsData();
@@ -121,7 +127,6 @@ export default function OrdersPage() {
                       {order.data.status}
                     </p>
                   </div>
-
                   <p>
                     {farmers.find(
                       (item) => item.data.farmer_id === order.data.farmer_id,
@@ -131,17 +136,23 @@ export default function OrdersPage() {
                   <p>
                     <strong>Products:</strong>
                   </p>
-                  <ul>
-                    {order.data.products.map((product, index) => {
-                      const productDetails = productMap.get(product.product_id);
-                      return (
-                        <li key={index}>
-                          {productDetails?.product_name || "Unknown"} x{" "}
-                          {product.quantity || 1} {productDetails?.unit || ""}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <div className="flex items-end justify-between">
+                    <ul>
+                      {order.data.products.map((product, index) => {
+                        const productDetails = productMap.get(
+                          product.product_id,
+                        );
+                        return (
+                          <li key={index}>
+                            {productDetails?.product_name || "Unknown"} x{" "}
+                            {product.quantity || 1} {productDetails?.unit || ""}
+                          </li>
+                        );
+                      })}
+                    </ul>
+
+                    <ActionButton doc={order} getOrders={getOrders} />
+                  </div>
                 </li>
               ))}
             </ul>

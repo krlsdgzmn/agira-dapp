@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { Farmer, FarmerData } from "@/types";
 import { listDocs, setDoc, uploadFile } from "@junobuild/core-peer";
+import { Loader2 } from "lucide-react";
 import { nanoid } from "nanoid";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
-import { Farmer, FarmerData } from "@/types";
 import FarmerDashboard from "./_components/farmer-dashboard";
 
 export default function DashboardPage() {

@@ -25,6 +25,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers";
+import PaymentMethod from "./_components/payment-method";
 
 export default function CartPage() {
   const [cart, setCart] = useState<Cart[]>([]);
@@ -322,7 +323,19 @@ export default function CartPage() {
           </p>
 
           <div className="rounded-lg border p-4">
-            <h1 className="font-bold">Products</h1>
+            <div className="border-b pb-2">
+              <h1 className="pb-2 font-bold text-farm">Address</h1>
+              <p className="text-sm text-muted-foreground">
+                123 Sample Street, Barangay 098, Malolos, Bulacan, 3000
+              </p>
+            </div>
+
+            <h1 className="pt-2 font-bold text-farm">Products</h1>
+            {cartProducts.length === 0 && (
+              <div className="border-b py-2 text-sm text-muted-foreground">
+                Your cart is empty
+              </div>
+            )}
             {cartProducts.map((product) => (
               <div key={product.data.product_id}>
                 <div className="flex justify-between pt-2 text-sm">
@@ -344,11 +357,16 @@ export default function CartPage() {
             ))}
             <div className="flex justify-between py-2 text-sm font-medium">
               <h2>Subtotal</h2>
-              <p>₱{subtotal.toFixed(2)}</p>
+              <p className="text-muted-foreground">₱{subtotal.toFixed(2)}</p>
             </div>
             <div className="flex justify-between pb-2 text-sm font-medium">
               <h2>Delivery Fee</h2>
-              <p>₱{deliveryFee.toFixed(2)}</p>
+              <p className="text-muted-foreground">₱{deliveryFee.toFixed(2)}</p>
+            </div>
+
+            <div className="border-t py-2">
+              <h1 className="pb-2 font-bold text-farm">Payment Method</h1>
+              <PaymentMethod />
             </div>
 
             <div className="flex items-center justify-between border-t pt-4 text-xl md:text-2xl">
