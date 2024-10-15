@@ -49,7 +49,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem
+          // enableSystem
           disableTransitionOnChange
         >
           {children}

@@ -10,12 +10,8 @@ const logos = [
     url: "/islacamp.png",
   },
   {
-    name: "Rotary",
-    url: "/rotary.png",
-  },
-  {
-    name: "DevCon",
-    url: "/devcon.png",
+    name: "PSITE Central Luzon",
+    url: "/psite.png",
   },
 ];
 
@@ -35,13 +31,13 @@ const AnimatedLogoCloud = () => {
             .map((index) => (
               <div
                 key={index}
-                className="flex shrink-0 animate-logo-cloud flex-row justify-around gap-6"
+                className="flex shrink-0 animate-logo-cloud flex-row items-center justify-around gap-6"
               >
                 {logos.map((logo, key) => (
                   <Image
                     key={key}
                     src={logo.url}
-                    className="h-8 w-fit px-2 brightness-0 dark:invert"
+                    className="h-fit w-[150px] px-2 brightness-0 dark:invert"
                     alt={`${logo.name}`}
                     width={8}
                     height={8}
