@@ -114,10 +114,6 @@ To get started with Agira, follow these steps:
 
 **Agira** is dedicated to revolutionizing the agriculture industry by facilitating direct connections between farmers and consumers. With its farm listing system and blockchain-based incentives, Agira strives to provide mutual benefits for both farmers and consumers, fostering a more efficient and transparent agricultural marketplace.
 
-## Hackathon Entry
-
-This project is an entry for the [ISLACamp Hackathon](https://hackathon.islacamp.ph/).
-
 ## Contributing
 
 If you would like to contribute to Agira, please follow the standard GitHub flow:
