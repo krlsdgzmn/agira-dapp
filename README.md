@@ -135,3 +135,10 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 ## Presentation
 
 Watch the presentation of Agira: [Watch Video](https://drive.google.com/file/d/1Os4k1JXVrFNdYu59lcHFIarooiPegJwv/view?usp=sharing)
+
+## Team Members
+
+- Alyhanna Faith Guinto - Project Manager
+- John Karlos De Guzman - Developer
+- Ivan Gonzales - Multimedia Specialist
+- Axl Louis Coronel - Presenter
